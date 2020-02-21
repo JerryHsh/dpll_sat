@@ -1,11 +1,18 @@
-#include "definition.h"
+#include "file_related.h"
 
-status read_cnf_file(cnf_node &node)
+void get_filename(char *filename)
 {
-    char name[30];
-    cout << "Input the file name please" << endl;
-    cin >> name;
-    if ((fp = fopen(name, "r")) == NULL)
+    cout << "Input the file name please(no need to enter '.cnf')" << endl;
+    cin >> filename;
+}
+
+status read_cnf_file(cnf_node &node, char *filename)
+{
+    FILE *fp;
+    char filename_open[81];
+    strcpy(filename_open, filename);
+    strcat(filename_open, ".cnf");
+    if ((fp = fopen(filename_open, "r")) == NULL)
     {
         printf("The file doesn't exist");
     }
@@ -19,6 +26,10 @@ status read_cnf_file(cnf_node &node)
             break;
         }
     }
+    node.result = (value *)malloc(node.literals_num * sizeof(value));
+    //initiate the result list
+    for (int i = 0; i < node.literals_num; i++)
+        node.result[i] = unassigned;
     int literal;
     vector<int> clause_store;
     for (int i = 0; i < node.clauses_num; i++)
@@ -35,5 +46,37 @@ status read_cnf_file(cnf_node &node)
             clause_store.push_back(literal);
         }
     }
+    fclose(fp);
+    return ok;
+}
+
+status show_cnf_file(cnf_node my_node)
+{
+    int i, j;
+    if (my_node.clauses_num == 0)
+    {
+        cout << "Input error" << endl;
+        return wrong;
+    }
+    for (i = 0; i < my_node.matrix.size(); i++)
+    {
+        for (j = 0; j < my_node.matrix[i].size(); j++)
+        {
+            cout << my_node.matrix[i][j] << ' ';
+        }
+        cout << endl;
+    }
+    return ok;
+}
+
+status store_result(char *filename, double time)
+{
+    FILE *fp;
+    strcat(filename, ".res");
+    fp = fopen(filename, "w");
+    if (fp == NULL)
+        return wrong;
+    fprintf(fp, "t:%fms", time);
+    fclose(fp);
     return ok;
 }
