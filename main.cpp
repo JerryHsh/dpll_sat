@@ -12,6 +12,7 @@ int main()
     cnf_node node;
     read_cnf_file(node,filename);
     //show_cnf_file(node);
+    
     //solution begin
 
     update_by_unit(node,4);

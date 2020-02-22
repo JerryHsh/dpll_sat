@@ -32,7 +32,10 @@ status remove_literal_from_clause(vector<int> &v, int literal) //remove the cert
         v.pop_back();
     for (auto i = v.begin(); i != v.end(); i++)
         if (*i == literal)
+        {
             v.erase(i); //maybe it contain the same literal
+            i = v.begin();
+        }
     v.shrink_to_fit();
     return ok;
 }
@@ -47,7 +50,7 @@ status update_by_unit(cnf_node &current_node, int literal) //update the current 
         if (check_literal_clause(*i, literal) == 1)
         {
             current_node.matrix.erase(i); //delete the whole clause
-            continue;
+            i=current_node.matrix.begin();
         }
         else if (check_literal_clause(*i, oppo_literal) == 1)
         {
@@ -55,6 +58,6 @@ status update_by_unit(cnf_node &current_node, int literal) //update the current 
         }
     }
     current_node.matrix.shrink_to_fit();
-    current_node.clauses_num=current_node.matrix.size();
+    current_node.clauses_num = current_node.matrix.size();
     return ok;
 }
