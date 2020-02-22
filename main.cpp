@@ -1,4 +1,5 @@
 #include"file_related.h"
+#include"clause_related.h"
 
 int main()
 {
@@ -10,11 +11,12 @@ int main()
     get_filename(filename);
     cnf_node node;
     read_cnf_file(node,filename);
-    show_cnf_file(node);
+    //show_cnf_file(node);
     //solution begin
 
-
-
+    update_by_unit(node,4);
+    show_cnf_file(node);
+    cout<<node.clauses_num<<endl;
     //end solution
     end=clock();
     processing_time=(double)(end-start)/CLOCKS_PER_SEC;
