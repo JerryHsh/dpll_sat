@@ -24,9 +24,9 @@ const value False = 0;
 const value unassigned = -1;
 
 typedef int clause_status;
-const clause_status empty = 0;
-const clause_status unit = 1;
-const clause_status normal = 2;
+const clause_status empty_c = 0;
+const clause_status unit_c = 1;
+const clause_status normal_c = 2;
 
 typedef int solution_status;
 const solution_status satisfied=1;
