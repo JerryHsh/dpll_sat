@@ -1,18 +1,27 @@
 #include "unit_clause.h"
 
-clause_status check_clause(cnf_node current_node, int num) //num means the number of clauses
+status find_unit_clause(cnf_node current_node, int &num) //if find the unit clause then return the position of the clause
 {
-    int var_num = current_node.matrix[num].size();
-    if (var_num == 1)
-        return unit_c;
-    else if (var_num == 0)
-        return empty_c; //the clause is empty means two unit become contradict
-    else
-        return normal_c;
+    int i;
+    for (i = 0; i < current_node.matrix.size(); i++)
+        if (current_node.matrix[i].size() == 1)
+            return i;
+    return -1; //if we didn't find it then return -1
+}
+
+status check_empty_clause(cnf_node current_node) //if find the empty clause return 1 otherwise return 0
+{
+    int i;
+    for (i = 0; i < current_node.matrix.size(); i++)
+        if (current_node.matrix[i].size() == 0)
+            return 1;
+        else
+            return 0;
 }
 
 solution_status check_matrix(cnf_node &current_node) //check the unit and empty clauses and do the solution
 {
+    /*
     int i, j;
     clause_status flag;
     if (current_node.matrix.size() == 0)
@@ -25,6 +34,7 @@ solution_status check_matrix(cnf_node &current_node) //check the unit and empty 
         else if (flag == empty_c)
             return unsatisfied;
     }
+    */
 }
 status update_by_unit(cnf_node &current_node, int literal)
 {
