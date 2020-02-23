@@ -100,12 +100,12 @@ status store_time(char *filename, double time)
     fp = fopen(store_file, "a");
     if (fp == NULL)
         return wrong;
-    fprintf(fp, "t:%fms", time);
+    fprintf(fp, "t:%fs", time);
     fclose(fp);
     return ok;
 }
 
-status store_result(char *filename, cnf_node &node)
+status store_result(char *filename, cnf_node &node,int search_node)
 {
     FILE *fp;
     char store_file[81];
@@ -114,6 +114,7 @@ status store_result(char *filename, cnf_node &node)
     fp = fopen(store_file, "w");
     if (fp == NULL)
         return overflow;
+    fprintf(fp,"the total search node is %d\n",search_node);
     int i;
     fprintf(fp, "result***********************************************\n");
     for (i = 1; i <= node.literals_num; i++)

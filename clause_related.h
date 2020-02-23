@@ -11,7 +11,7 @@ int check_empty_matrix(cnf_node &current_node);                 //check if the m
 int check_literal_clause(vector<int> v, int literal);           //check if the clause contain given literal
 status remove_literal_from_clause(vector<int> &v, int literal); //remove the certain literal from the clause
 void assigned_literal(cnf_node &current_node, int literal);
-cnf_node add_unit_clause(cnf_node current_node,int literal);//add new unit clauses into the cnf clauses set
+cnf_node add_unit_clause(cnf_node &current_node,int literal);//add new unit clauses into the cnf clauses set
 
 
 

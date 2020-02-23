@@ -82,10 +82,19 @@ status update_by_unit(cnf_node &current_node, int literal) //update the current 
     return ok;
 }
 
-cnf_node add_unit_clause(cnf_node current_node, int literal) //add new unit clauses into the cnf clauses set
+cnf_node add_unit_clause(cnf_node &current_node, int literal) //add new unit clauses into the cnf clauses set the node is new
 {
+    cnf_node new_node=current_node;
     vector<int> new_unit_clause(1, literal);
-    current_node.matrix.push_back(new_unit_clause);
-    current_node.clauses_num = current_node.matrix.size();
-    return current_node;
+    new_node.matrix.push_back(new_unit_clause);
+    new_node.clauses_num = current_node.matrix.size();
+    new_node.result=(value*)malloc((new_node.literals_num+1)*sizeof(value));
+    if(new_node.result==NULL)
+    {
+        cout<<"overflow"<<endl;
+        exit(overflow);
+    }
+    for (int i = 0; i <= current_node.literals_num; i++)
+        new_node.result[i] = current_node.result[i];
+    return new_node;
 }
