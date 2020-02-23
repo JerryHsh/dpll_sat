@@ -40,4 +40,5 @@ typedef struct
     float **weight;//an 2darray store the current literal weight begin with 1
 } cnf_node;
 
+
 #endif // !DEFINITION_H

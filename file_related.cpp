@@ -1,5 +1,5 @@
 #include "file_related.h"
-#include"my_debug.h"
+#include "my_debug.h"
 void get_filename(char *filename)
 {
     cout << "Input the file name please(no need to enter '.cnf')" << endl;
@@ -33,7 +33,8 @@ status read_cnf_file(cnf_node &node, char *filename)
     strcat(filename_open, ".cnf");
     if ((fp = fopen(filename_open, "r")) == NULL)
     {
-        printf("The file doesn't exist");
+        printf("The file doesn't exist\n");
+        return wrong;
     }
     char flag;
     while (true)
@@ -82,9 +83,9 @@ status show_cnf_node(cnf_node &my_node)
         }
         cout << endl;
     }
-    cout<<"print each node's weight*********************************************************"<<endl;
+    cout << "print each node's weight*********************************************************" << endl;
     print_weight(my_node);
-    cout<<"print each node's result*********************************************************"<<endl;
+    cout << "print each node's result*********************************************************" << endl;
     print_result(my_node);
     return ok;
 }
@@ -92,11 +93,38 @@ status show_cnf_node(cnf_node &my_node)
 status store_result(char *filename, double time)
 {
     FILE *fp;
-    strcat(filename, ".res");
-    fp = fopen(filename, "w");
+    char store_file[81];
+    strcpy(store_file, filename);
+    strcat(store_file, ".res");
+    fp = fopen(store_file, "a");
     if (fp == NULL)
         return wrong;
     fprintf(fp, "t:%fms", time);
+    fclose(fp);
+    return ok;
+}
+
+status store_result(char *filename, cnf_node &node)
+{
+    FILE *fp;
+    char store_file[81];
+    strcpy(store_file, filename);
+    strcat(store_file, ".res");
+    fp = fopen(store_file, "w");
+    if (fp == NULL)
+        return overflow;
+    int i;
+    fprintf(fp, "result***********************************************\n");
+    for (i = 1; i <= node.literals_num; i++)
+    {
+        fprintf(fp, "literal: %d\t", i);
+        if (node.result[i] == True)
+            fprintf(fp, "value: True\n");
+        else if (node.result[i] == False)
+            fprintf(fp, "value: False\n");
+        else
+            fprintf(fp, "value: unassigned\n");
+    }
     fclose(fp);
     return ok;
 }
