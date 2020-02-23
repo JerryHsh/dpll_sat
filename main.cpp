@@ -1,5 +1,4 @@
-#include"file_related.h"
-#include"clause_related.h"
+#include"dpll_solution.h"
 
 int main()
 {
@@ -11,13 +10,19 @@ int main()
     get_filename(filename);
     cnf_node node;
     read_cnf_file(node,filename);
-    //show_cnf_file(node);
-    
-    //solution begin
+    //test the function
+    show_cnf_node(node);
+    calculate_weight(node);
+    int new_unit_literal=render_new_unit(node);
+    //update_by_unit(node,new_unit_literal);
+    //show_cnf_node(node);
+    //calculate_weight(node);
+    //show_cnf_node(node);
 
-    update_by_unit(node,4);
-    show_cnf_file(node);
-    cout<<node.clauses_num<<endl;
+
+    
+    //end test
+    //solution begin
     //end solution
     end=clock();
     processing_time=(double)(end-start)/CLOCKS_PER_SEC;

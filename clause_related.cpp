@@ -3,7 +3,9 @@
 int find_unit_literal(cnf_node &current_node) //if find the unit clause then return the literal
 {
     int i;
-    for (i = 0; i < current_node.matrix.size(); i++)
+    if (current_node.matrix.back().size() == 1)
+        return current_node.matrix.back()[0];
+    for (i = 0; i < current_node.matrix.size() - 1; i++)
         if (current_node.matrix[i].size() == 1)
             return current_node.matrix[i][0];
     return 0; //if we didn't find it then return 0
@@ -40,8 +42,18 @@ status remove_literal_from_clause(vector<int> &v, int literal) //remove the cert
     return ok;
 }
 
+void assigned_literal(cnf_node &current_node, int literal)
+{
+    if (literal > 0)
+        current_node.result[literal] = True;
+    else
+        current_node.result[literal * -1] = False;
+}
+
 status update_by_unit(cnf_node &current_node, int literal) //update the current node by given unit
 {
+    //give the literal true value (positive and negative are viewed as 2literal)
+    assigned_literal(current_node, literal);
     int oppo_literal = literal * (-1);
     while (check_literal_clause(current_node.matrix.back(), literal) == 1)
         current_node.matrix.pop_back();
@@ -50,7 +62,7 @@ status update_by_unit(cnf_node &current_node, int literal) //update the current 
         if (check_literal_clause(*i, literal) == 1)
         {
             current_node.matrix.erase(i); //delete the whole clause
-            i=current_node.matrix.begin();
+            i = current_node.matrix.begin();
         }
         else if (check_literal_clause(*i, oppo_literal) == 1)
         {
@@ -60,4 +72,11 @@ status update_by_unit(cnf_node &current_node, int literal) //update the current 
     current_node.matrix.shrink_to_fit();
     current_node.clauses_num = current_node.matrix.size();
     return ok;
+}
+
+cnf_node add_unit_clause(cnf_node current_node,int literal)//add new unit clauses into the cnf clauses set
+{
+    vector<int> new_unit_clause(1,literal);
+    current_node.matrix.push_back(new_unit_clause);
+    return current_node;
 }

@@ -1,9 +1,28 @@
 #include "file_related.h"
-
+#include"my_debug.h"
 void get_filename(char *filename)
 {
     cout << "Input the file name please(no need to enter '.cnf')" << endl;
     cin >> filename;
+}
+
+status initialize_related_info(cnf_node &current_node)
+{
+    //initiate the result list
+    current_node.result = (value *)malloc((current_node.literals_num + 1) * sizeof(value));
+    //initialize the weight list
+    current_node.weight = (float **)malloc((current_node.literals_num + 1) * sizeof(float *));
+    if (current_node.result == NULL || current_node.weight == NULL)
+        return overflow;
+    for (int i = 0; i <= current_node.literals_num; i++)
+        current_node.result[i] = unassigned;
+    for (int i = 0; i <= current_node.literals_num; i++)
+    {
+        current_node.weight[i] = (float *)malloc(2 * sizeof(float));
+        current_node.weight[i][negative] = -1;
+        current_node.weight[i][positive] = -1;
+    }
+    return ok;
 }
 
 status read_cnf_file(cnf_node &node, char *filename)
@@ -26,10 +45,7 @@ status read_cnf_file(cnf_node &node, char *filename)
             break;
         }
     }
-    node.result = (value *)malloc(node.literals_num * sizeof(value));
-    //initiate the result list
-    for (int i = 0; i < node.literals_num; i++)
-        node.result[i] = unassigned;
+    initialize_related_info(node);
     int literal;
     vector<int> clause_store;
     for (int i = 0; i < node.clauses_num; i++)
@@ -50,7 +66,7 @@ status read_cnf_file(cnf_node &node, char *filename)
     return ok;
 }
 
-status show_cnf_file(cnf_node my_node)
+status show_cnf_node(cnf_node &my_node)
 {
     int i, j;
     if (my_node.clauses_num == 0)
@@ -66,6 +82,10 @@ status show_cnf_file(cnf_node my_node)
         }
         cout << endl;
     }
+    cout<<"print each node's weight*********************************************************"<<endl;
+    print_weight(my_node);
+    cout<<"print each node's result*********************************************************"<<endl;
+    print_result(my_node);
     return ok;
 }
 
