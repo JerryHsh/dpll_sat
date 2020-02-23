@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <numeric>
+#include<math.h>
 
 using namespace std;
 
@@ -10,12 +11,18 @@ void remove_literal_from_clause(vector<int> &v, int literal) //remove the certai
         v.pop_back();
     for (auto i = v.begin(); i != v.end(); i++)
         if (*i == literal)
+        {
             v.erase(i); //maybe it contain the same literal
+            i = v.begin();
+        }
     v.shrink_to_fit();
 }
 
 int main()
 {
+
+    double m=2;
+    cout<<pow(m,-5)<<endl;
     vector<int> v;
     int i;
     for (i = 1; i <= 25; i++)
