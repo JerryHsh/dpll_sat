@@ -41,4 +41,5 @@ typedef struct
 } cnf_node;
 
 
+
 #endif // !DEFINITION_H

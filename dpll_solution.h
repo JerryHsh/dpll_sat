@@ -6,6 +6,7 @@
 #include"clause_related.h"
 #include"my_debug.h"
 
-solution_status dpll_algorithm(cnf_node current_node,int &search_node);//the main function
+
+solution_status dpll_algorithm(cnf_node current_node,char *filename,int &search_node);//the main function
 
 #endif // !DPLL_SOLUTION_H

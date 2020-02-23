@@ -75,6 +75,7 @@ status show_cnf_node(cnf_node &my_node)
         cout << "Input error" << endl;
         return wrong;
     }
+    printf("clause num: %d literal num: %d*********************************************************\n",my_node.clauses_num,my_node.literals_num);
     for (i = 0; i < my_node.matrix.size(); i++)
     {
         for (j = 0; j < my_node.matrix[i].size(); j++)
@@ -90,7 +91,7 @@ status show_cnf_node(cnf_node &my_node)
     return ok;
 }
 
-status store_result(char *filename, double time)
+status store_time(char *filename, double time)
 {
     FILE *fp;
     char store_file[81];

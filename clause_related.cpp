@@ -22,6 +22,8 @@ int check_empty_matrix(cnf_node &current_node) //check if the matrix contains em
 
 int check_literal_clause(vector<int> v, int literal) //check if the clause contain given literal
 {
+    if (v.size() == 0)
+        return 0;
     for (auto i = v.begin(); i != v.end(); i++)
         if (*i == literal)
             return 1; //return 1 if it contains the given literal
@@ -55,8 +57,14 @@ status update_by_unit(cnf_node &current_node, int literal) //update the current 
     //give the literal true value (positive and negative are viewed as 2literal)
     assigned_literal(current_node, literal);
     int oppo_literal = literal * (-1);
+    //debug begin
+    //debug end
     while (check_literal_clause(current_node.matrix.back(), literal) == 1)
+    {
         current_node.matrix.pop_back();
+        if (current_node.matrix.size() == 0)
+            break;
+    }
     for (auto i = current_node.matrix.begin(); i != current_node.matrix.end(); i++)
     {
         if (check_literal_clause(*i, literal) == 1)
@@ -74,9 +82,10 @@ status update_by_unit(cnf_node &current_node, int literal) //update the current 
     return ok;
 }
 
-cnf_node add_unit_clause(cnf_node current_node,int literal)//add new unit clauses into the cnf clauses set
+cnf_node add_unit_clause(cnf_node current_node, int literal) //add new unit clauses into the cnf clauses set
 {
-    vector<int> new_unit_clause(1,literal);
+    vector<int> new_unit_clause(1, literal);
     current_node.matrix.push_back(new_unit_clause);
+    current_node.clauses_num = current_node.matrix.size();
     return current_node;
 }
