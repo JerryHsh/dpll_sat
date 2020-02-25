@@ -1,5 +1,34 @@
 #include "dpll_solution.h"
 
+status solver()
+{
+    //do preparation
+    char filename[81];
+    int search_node = 0;
+    double processing_time;
+    time_t start, end;
+    start = clock();
+    get_filename(filename);
+    cnf_node node;
+    //test the function
+    //end test
+    //solution begin
+    if (read_cnf_file(node, filename) == ok)
+    {
+        if (dpll_algorithm(node, filename, search_node) == satisfied)
+            cout << "has running this function" << endl;
+    }
+    else
+    {
+        return wrong;
+    }
+    //end solution
+    end = clock();
+    processing_time = (double)(end - start) / CLOCKS_PER_SEC;
+    store_time(filename, processing_time);
+    return ok;
+}
+
 solution_status dpll_algorithm(cnf_node current_node, char *filename, int &search_node) //the main function
 {
     search_node++;
@@ -15,7 +44,7 @@ solution_status dpll_algorithm(cnf_node current_node, char *filename, int &searc
         //  show_cnf_node(current_node);
         if (current_node.matrix.size() == 0)
         {
-            store_result(filename, current_node,search_node);
+            store_result(filename, current_node, search_node);
             cout << "satisfied*******************************************************" << endl;
             return satisfied;
         }
