@@ -1,9 +1,9 @@
 #include "dpll_solution.h"
 
-status solver()
+status solver(char *filename)
 {
     //do preparation
-    char filename[81];
+    strcpy(filename,"");
     int search_node = 0;
     double processing_time;
     time_t start, end;
