@@ -3,12 +3,10 @@
 status solver(char *filename)
 {
     //do preparation
-    strcpy(filename,"");
     int search_node = 0;
     double processing_time;
     time_t start, end;
     start = clock();
-    get_filename(filename);
     cnf_node node;
     //test the function
     //end test
@@ -16,10 +14,16 @@ status solver(char *filename)
     if (read_cnf_file(node, filename) == ok)
     {
         if (dpll_algorithm(node, filename, search_node) == satisfied)
-            cout << "has running this function" << endl;
+            cout << "dpll success" << endl;
+        else
+        {
+            cout<<"fail to find a solution"<<endl;
+        }
+        
     }
     else
     {
+        cout<<"can't read the file"<<endl;
         return wrong;
     }
     //end solution

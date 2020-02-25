@@ -2,7 +2,8 @@
 
 int main()
 {
-    char filename[81];//store the filename
+    char filename[81]; //store the filename
+    get_filename(filename);
     solver(filename);
     return 0;
 }
