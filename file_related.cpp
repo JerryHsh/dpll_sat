@@ -66,9 +66,9 @@ status show_cnf_node(cnf_node &my_node)
         cout << endl;
     }
     cout << "print each node's weight*********************************************************" << endl;
-    print_weight(my_node);
+    //print_weight(my_node);
     cout << "print each node's result*********************************************************" << endl;
-    print_result(my_node);
+    //print_result(my_node);
     return ok;
 }
 
