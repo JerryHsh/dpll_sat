@@ -9,20 +9,20 @@ void calculate_literal_weight(cnf_node &current_node, int literal) //calculate t
             positive_weight += optimize_value(current_node.matrix[i].size());
         else if (check_literal_clause(current_node.matrix[i], literal * (-1)) == 1)
             negative_weight += optimize_value(current_node.matrix[i].size());
-    current_node.weight[literal][positive] = positive_weight;
-    current_node.weight[literal][negative] = negative_weight;
+    current_node.weight_dict[literal][positive] = positive_weight;
+    current_node.weight_dict[literal][negative] = negative_weight;
 }
 
 status calculate_weight(cnf_node &current_node) //calculate all the literal weight in the node
 {
     int i;
     for (i = 1; i <= current_node.literals_num; i++)
-        if (current_node.result[i] == unassigned)
+        if (current_node.result_dict[i] == unassigned)
             calculate_literal_weight(current_node, i);
         else
         {
-            current_node.weight[i][positive] = -1;
-            current_node.weight[i][negative] = -1;
+            current_node.weight_dict[i][positive] = -1;
+            current_node.weight_dict[i][negative] = -1;
         }
     return ok;
 }
@@ -39,22 +39,21 @@ float compare_value(float x, float y)
 
 int render_new_unit(cnf_node &current_node) //select a new literal to be true or false
 {
-    int selected_literal = 0;//selected literal is always >0
+    int selected_literal = 0;                               //selected literal is always >0
     float max_compare_value = 0, current_compare_value = 0; //means x+y
-    int i;
-    for (i = 1; i <= current_node.literals_num; i++)
+    for (auto i = current_node.result_dict.begin(); i != current_node.result_dict.end(); i++)
     {
-        if (current_node.result[i] == unassigned)
+        if (i->second == unassigned)
         {
-            current_compare_value = compare_value(current_node.weight[i][positive], current_node.weight[i][negative]);
+            current_compare_value = compare_value(current_node.weight_dict[i->first][positive], current_node.weight_dict[i->first][negative]);
             if (current_compare_value > max_compare_value)
             {
-                selected_literal = i;
+                selected_literal = i->first;
                 max_compare_value = current_compare_value;
             }
         }
     }
-    if (current_node.weight[selected_literal][positive] >= current_node.weight[selected_literal][negative])
+    if (current_node.weight_dict[selected_literal][positive] >= current_node.weight_dict[selected_literal][negative])
         return selected_literal;
     else
         return selected_literal * -1;

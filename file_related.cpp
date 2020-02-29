@@ -81,7 +81,7 @@ status store_time(char *filename, double time)
     fp = fopen(store_file, "a");
     if (fp == NULL)
         return wrong;
-    fprintf(fp, "t:%.0fms", time*1000);
+    fprintf(fp, "t:%.0fms", time * 1000);
     fclose(fp);
     return ok;
 }
@@ -98,15 +98,21 @@ status store_result(char *filename, cnf_node &node, int search_node)
     fprintf(fp, "the total search node is %d\n", search_node);
     int i;
     fprintf(fp, "result***********************************************\n");
-    for (i = 1; i <= node.literals_num; i++)
+    for (auto iterator = node.result_dict.begin(); iterator != node.result_dict.end(); iterator++)
     {
-        fprintf(fp, "literal: %d\t", i);
-        if (node.result[i] == True)
-            fprintf(fp, "value: True\n");
-        else if (node.result[i] == False)
-            fprintf(fp, "value: False\n");
+        fprintf(fp, "literal: %d\t", iterator->first);
+        if (iterator->second == True)
+        {
+            fprintf(fp, "True\n");
+        }
+        else if (iterator->second == False)
+        {
+            fprintf(fp, "False\n");
+        }
         else
-            fprintf(fp, "value: unassigned\n");
+        {
+            fprintf(fp, "unassigned\n");
+        }
     }
     fclose(fp);
     return ok;
@@ -114,19 +120,13 @@ status store_result(char *filename, cnf_node &node, int search_node)
 
 status initialize_related_info(cnf_node &current_node)
 {
-    //initiate the result list
-    current_node.result = (value *)malloc((current_node.literals_num + 1) * sizeof(value));
-    //initialize the weight list
-    current_node.weight = (float **)malloc((current_node.literals_num + 1) * sizeof(float *));
-    if (current_node.result == NULL || current_node.weight == NULL)
-        return overflow;
-    for (int i = 0; i <= current_node.literals_num; i++)
-        current_node.result[i] = unassigned;
-    for (int i = 0; i <= current_node.literals_num; i++)
+    //new one
+    for (int i = 1; i <= current_node.literals_num; i++)
     {
-        current_node.weight[i] = (float *)malloc(2 * sizeof(float));
-        current_node.weight[i][negative] = -1;
-        current_node.weight[i][positive] = -1;
+        current_node.result_dict[i] = unassigned;
+        current_node.weight_dict[i] = (float *)malloc(2 * sizeof(float));
+        current_node.weight_dict[i][positive] = -1;
+        current_node.weight_dict[i][negative] = -1;
     }
     return ok;
 }

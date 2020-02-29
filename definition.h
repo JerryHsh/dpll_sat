@@ -37,9 +37,9 @@ typedef struct
     int literals_num;
     int clauses_num;
     vector<vector<int>> matrix;
-    value *result;               //an array store the current result begin with 1
+    //value *result;               //an array store the current result begin with 1
     map<int, value> result_dict; //subsititute for result
-    float **weight;              //an 2darray store the current literal weight begin with 1
+    //float **weight;              //an 2darray store the current literal weight begin with 1
     map<int, float *> weight_dict;
 } cnf_node;
 

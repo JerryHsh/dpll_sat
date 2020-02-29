@@ -47,9 +47,9 @@ status remove_literal_from_clause(vector<int> &v, int literal) //remove the cert
 void assigned_literal(cnf_node &current_node, int literal)
 {
     if (literal > 0)
-        current_node.result[literal] = True;
+        current_node.result_dict[literal] = True;
     else
-        current_node.result[literal * -1] = False;
+        current_node.result_dict[literal * -1] = False;
 }
 
 status update_by_unit(cnf_node &current_node, int literal) //update the current node by given unit
@@ -88,13 +88,5 @@ cnf_node add_unit_clause(cnf_node &current_node, int literal) //add new unit cla
     vector<int> new_unit_clause(1, literal);
     new_node.matrix.push_back(new_unit_clause);
     new_node.clauses_num = current_node.matrix.size();
-    new_node.result=(value*)malloc((new_node.literals_num+1)*sizeof(value));
-    if(new_node.result==NULL)
-    {
-        cout<<"overflow"<<endl;
-        exit(overflow);
-    }
-    for (int i = 0; i <= current_node.literals_num; i++)
-        new_node.result[i] = current_node.result[i];
     return new_node;
 }
