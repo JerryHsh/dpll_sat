@@ -8,6 +8,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <string.h>
+#include<map>
 
 using namespace std;
 
@@ -37,7 +38,9 @@ typedef struct
     int clauses_num;
     vector<vector<int>> matrix;
     value *result;//an array store the current result begin with 1
+    map<int,value> result_map;  //subsititute for result 
     float **weight;//an 2darray store the current literal weight begin with 1
+    map<int,float*> weight_map;
 } cnf_node;
 
 
