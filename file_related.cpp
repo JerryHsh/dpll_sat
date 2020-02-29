@@ -6,25 +6,6 @@ void get_filename(char *filename)
     cin >> filename;
 }
 
-status initialize_related_info(cnf_node &current_node)
-{
-    //initiate the result list
-    current_node.result = (value *)malloc((current_node.literals_num + 1) * sizeof(value));
-    //initialize the weight list
-    current_node.weight = (float **)malloc((current_node.literals_num + 1) * sizeof(float *));
-    if (current_node.result == NULL || current_node.weight == NULL)
-        return overflow;
-    for (int i = 0; i <= current_node.literals_num; i++)
-        current_node.result[i] = unassigned;
-    for (int i = 0; i <= current_node.literals_num; i++)
-    {
-        current_node.weight[i] = (float *)malloc(2 * sizeof(float));
-        current_node.weight[i][negative] = -1;
-        current_node.weight[i][positive] = -1;
-    }
-    return ok;
-}
-
 status read_cnf_file(cnf_node &node, char *filename)
 {
     FILE *fp;
@@ -75,7 +56,7 @@ status show_cnf_node(cnf_node &my_node)
         cout << "Input error" << endl;
         return wrong;
     }
-    printf("clause num: %d literal num: %d*********************************************************\n",my_node.clauses_num,my_node.literals_num);
+    printf("clause num: %d literal num: %d*********************************************************\n", my_node.clauses_num, my_node.literals_num);
     for (i = 0; i < my_node.matrix.size(); i++)
     {
         for (j = 0; j < my_node.matrix[i].size(); j++)
@@ -100,12 +81,12 @@ status store_time(char *filename, double time)
     fp = fopen(store_file, "a");
     if (fp == NULL)
         return wrong;
-    fprintf(fp, "t:%fs", time);
+    fprintf(fp, "t:%.0fms", time*1000);
     fclose(fp);
     return ok;
 }
 
-status store_result(char *filename, cnf_node &node,int search_node)
+status store_result(char *filename, cnf_node &node, int search_node)
 {
     FILE *fp;
     char store_file[81];
@@ -114,7 +95,7 @@ status store_result(char *filename, cnf_node &node,int search_node)
     fp = fopen(store_file, "w");
     if (fp == NULL)
         return overflow;
-    fprintf(fp,"the total search node is %d\n",search_node);
+    fprintf(fp, "the total search node is %d\n", search_node);
     int i;
     fprintf(fp, "result***********************************************\n");
     for (i = 1; i <= node.literals_num; i++)
@@ -129,4 +110,86 @@ status store_result(char *filename, cnf_node &node,int search_node)
     }
     fclose(fp);
     return ok;
+}
+
+status initialize_related_info(cnf_node &current_node)
+{
+    //initiate the result list
+    current_node.result = (value *)malloc((current_node.literals_num + 1) * sizeof(value));
+    //initialize the weight list
+    current_node.weight = (float **)malloc((current_node.literals_num + 1) * sizeof(float *));
+    if (current_node.result == NULL || current_node.weight == NULL)
+        return overflow;
+    for (int i = 0; i <= current_node.literals_num; i++)
+        current_node.result[i] = unassigned;
+    for (int i = 0; i <= current_node.literals_num; i++)
+    {
+        current_node.weight[i] = (float *)malloc(2 * sizeof(float));
+        current_node.weight[i][negative] = -1;
+        current_node.weight[i][positive] = -1;
+    }
+    return ok;
+}
+
+void intialize_dict_according_to_three_digit(cnf_node &node, int size, int three_digit)
+{
+    int five_digit_p, five_digit_n, four_digit;
+    int i;
+    for (i = 1; i <= size; i++)
+    {
+        four_digit = three_digit * 10 + i;
+        initialize_dict_by_number(node, four_digit);
+        five_digit_p = four_digit * 10 + 1;
+        initialize_dict_by_number(node, five_digit_p);
+        five_digit_n = four_digit * 10;
+        initialize_dict_by_number(node, five_digit_n);
+    }
+}
+
+void initialize_dict_info(cnf_node &mynode, int size)
+{
+    //result dict
+    int three_digit_row, three_digit_column;
+    int i, j;
+    for (i = 1; i <= size; i++)
+    {
+        for (j = 1; j <= size; j++)
+        {
+            initialize_dict_by_number(mynode, 10 * i + j);
+        }
+    }
+    for (i = 1; i <= size; i++)
+    {
+        for (j = i + 1; j <= size; j++)
+        {
+            three_digit_row = 100 + i * 10 + j;
+            three_digit_column = 200 + i * 10 + j;
+            //row
+            initialize_dict_by_number(mynode, three_digit_row);
+            intialize_dict_according_to_three_digit(mynode, size, three_digit_row);
+            //column
+            initialize_dict_by_number(mynode, three_digit_column);
+            intialize_dict_according_to_three_digit(mynode, size, three_digit_column);
+        }
+    }
+    cout << mynode.result_dict.size() << ' ' << mynode.weight_dict.size() << endl;
+}
+
+void initialize_weight_dict(cnf_node &node, int number)
+{
+    node.weight_dict[number] = (float *)malloc(2 * sizeof(float));
+    node.weight_dict[number][positive] = -1;
+    node.weight_dict[number][negative] = -1;
+}
+
+void initialize_dict_by_number(cnf_node &node, int number)
+{
+    node.result_dict[number] = unassigned;
+    initialize_weight_dict(node, number);
+}
+
+void show_dict(cnf_node mynode)
+{
+    for (auto iterator = mynode.weight_dict.begin(); iterator != mynode.weight_dict.end(); iterator++)
+        cout << iterator->first << " positive:" << iterator->second[positive] << " negative:" << iterator->second[negative] << endl;
 }
