@@ -2,6 +2,6 @@
 
 #include "dpll_solution.h"
 
-void diplay_choice();//display the choice
+bool display_choice();//display the choice
 
 #endif // !DISPLAY

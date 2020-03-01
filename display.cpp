@@ -1,6 +1,10 @@
 #include"display.h"
 
-void display_choice()
+bool display_choice()
 {
-    system()
+    bool choice;
+    system("clear");
+    cout<<"dpll or soduku 0/1"<<endl;
+    cin>>choice;
+    return choice;
 }

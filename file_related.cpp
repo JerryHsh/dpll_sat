@@ -1,9 +1,43 @@
 #include "file_related.h"
-#include "my_debug.h"
 void get_filename(char *filename)
 {
     cout << "Input the file name please(no need to enter '.cnf')" << endl;
     cin >> filename;
+}
+
+status read_sodoku_cnf(cnf_node &node, char *filename, int size)
+{
+    FILE *fp;
+    char filename_open[81];
+    strcpy(filename_open, filename);
+    strcat(filename_open, ".cnf");
+    cout<<filename<<endl;
+    if ((fp = fopen(filename_open, "r")) == NULL)
+    {
+        printf("The sodoku file doesn't exist\n");
+        return wrong;
+    }
+    node.clauses_num = 4 * size * (size - 2) + 4 * Combination_count(size, size / 2 + 1) * size + 2 * Combination_count(size, 2) * (10 * size + 1);
+    cout<<node.clauses_num<<endl;
+    node.literals_num = size ^ 2 + 2 * Combination_count(size, 2) * (1 + 3 * size);
+    int literal;
+    vector<int> clause_store;
+    for (int i = 0; i < node.clauses_num; i++)
+    {
+        while (1)
+        {
+            fscanf(fp, "%d", &literal);
+            if (literal == 0)
+            {
+                node.matrix.push_back(clause_store);
+                clause_store.clear();
+                break;
+            }
+            clause_store.push_back(literal);
+        }
+    }
+    fclose(fp);
+    return ok;
 }
 
 status read_cnf_file(cnf_node &node, char *filename)
@@ -48,7 +82,6 @@ status read_cnf_file(cnf_node &node, char *filename)
     return ok;
 }
 
-
 status show_cnf_node(cnf_node &my_node)
 {
     int i, j;
@@ -89,6 +122,7 @@ status store_time(char *filename, double time)
 
 status store_result(char *filename, cnf_node &node, int search_node)
 {
+    cout<<"******************************enter the store result"<<endl;
     FILE *fp;
     char store_file[81];
     strcpy(store_file, filename);
@@ -173,7 +207,7 @@ void initialize_dict_info(cnf_node &mynode, int size)
             intialize_dict_according_to_three_digit(mynode, size, three_digit_column);
         }
     }
-    cout << mynode.result_dict.size() << ' ' << mynode.weight_dict.size() << endl;
+    //cout << mynode.result_dict.size() << ' ' << mynode.weight_dict.size() << endl;
 }
 
 void initialize_weight_dict(cnf_node &node, int number)

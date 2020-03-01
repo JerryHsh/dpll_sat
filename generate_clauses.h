@@ -12,5 +12,7 @@ void generate_by_rule3(FILE *fp, int size);           //generate clauses by rule
 int reverse(int original, int size);//reverse the sequence number of the literal by size
 int Combination_All(int Position, int Have_In, list<int> Have_Get, int length, int need_get, FILE *fp, int *Num_list);
 void rule3_gen_clauses(FILE *fp, int row_or_column, int line_a, int line_b, int size); //row is 1 and column is 2
+int Combination_count(int n, int k);//count the combination 
+
 
 #endif // !GENERATE_CLAUSES

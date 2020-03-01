@@ -26,14 +26,18 @@ status solver(char *filename, cnf_node &node)
 solution_status dpll_algorithm(cnf_node current_node, char *filename, int &search_node) //the main function
 {
     search_node++;
-    //if (search_node % 1 == 0)
-    //  getchar();
-    if (search_node % 5 == 0)
+    /*
+    if (search_node % 1 == 0)
+      {
+          show_cnf_node(current_node);
+          getchar();
+      }
+    */
+    if (search_node % 2 == 0)
     {
         system("clear");
         cout << "total search node: " << search_node << " matrix size: " << current_node.matrix.size() << endl; //debug
-    }
-    //show_cnf_node(current_node);                                                                                                                                                                                                    //debug
+    }                                                                                                           //debug
     int unit_literal = 0;
     while ((unit_literal = find_unit_literal(current_node)) != 0)
     {

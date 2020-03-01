@@ -16,13 +16,13 @@ void calculate_literal_weight(cnf_node &current_node, int literal) //calculate t
 status calculate_weight(cnf_node &current_node) //calculate all the literal weight in the node
 {
     int i;
-    for (i = 1; i <= current_node.literals_num; i++)
-        if (current_node.result_dict[i] == unassigned)
-            calculate_literal_weight(current_node, i);
+    for (auto i=current_node.result_dict.begin();i!=current_node.result_dict.end();i++)
+        if (current_node.result_dict[i->first] == unassigned)
+            calculate_literal_weight(current_node, i->first);
         else
         {
-            current_node.weight_dict[i][positive] = -1;
-            current_node.weight_dict[i][negative] = -1;
+            current_node.weight_dict[i->first][positive] = -1;
+            current_node.weight_dict[i->first][negative] = -1;
         }
     return ok;
 }

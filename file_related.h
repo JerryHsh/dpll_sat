@@ -2,6 +2,8 @@
 #define FILE_RELATED_H
 
 #include "definition.h"
+#include "my_debug.h"
+#include"generate_clauses.h"
 
 void get_filename(char *name);
 status read_cnf_file(cnf_node &node, char *filename);
@@ -14,5 +16,7 @@ void initialize_dict_info(cnf_node &mynode, int size);
 void initialize_weight_dict(cnf_node &node,int number);
 void initialize_dict_by_number(cnf_node &node,int number);
 void show_dict(cnf_node mynode);
+status read_sodoku_cnf(cnf_node &node, char *filename, int size);
+
 
 #endif // !FILE_RELATED_H

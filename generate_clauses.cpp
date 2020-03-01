@@ -3,8 +3,10 @@
 status generate_clauses(char filename[81], int size) //store the clauses in filename file
 {
     FILE *fp;
-    strcat(filename, ".cnf");
-    fp = fopen(filename, "w");
+    char filename_open[81];
+    strcpy(filename_open,filename);
+    strcat(filename_open, ".cnf");
+    fp = fopen(filename_open, "w");
     if (fp == NULL)
     {
         cout << "overflow" << endl;
@@ -52,6 +54,16 @@ void generate_by_rule2(FILE *fp, int size) //generate clauses by rule 2
     }
     list<int> Have_Get;
     Combination_All(0, 0, Have_Get, size, size / 2 + 1, fp, num_list);
+}
+
+int Combination_count(int n, int k)
+{
+    if (n == k || k == 0)
+        return 1;
+    else if (k == 1)
+        return n;
+    else
+        return Combination_count(n - 1, k - 1) + Combination_count(n - 1, k);
 }
 
 int Combination_All(int Position, int Have_In, list<int> Have_Get, int size, int need_get, FILE *fp, int *Num_list)
@@ -124,21 +136,21 @@ void rule3_gen_clauses(FILE *fp, int row_or_column, int line_a, int line_b, int 
 {
     int i;
     int five_digit_p, five_digit_n, four_digit, three_digit;
-    int line_a_num,line_b_num;
+    int line_a_num, line_b_num;
     three_digit = row_or_column * 100 + line_a * 10 + line_b;
     for (i = 1; i <= size; i++)
     {
-        if(row_or_column==1)
+        if (row_or_column == 1)
         {
-            line_a_num=line_a * 10 + i;
-            line_b_num=line_b * 10 + i;
+            line_a_num = line_a * 10 + i;
+            line_b_num = line_b * 10 + i;
         }
         else
         {
-            line_a_num=10*i+line_a;
-            line_b_num=10*i+line_b;
+            line_a_num = 10 * i + line_a;
+            line_b_num = 10 * i + line_b;
         }
-        
+
         five_digit_p = row_or_column * 10000 + line_a * 1000 + line_b * 100 + i * 10 + 1; //positive one
         fprintf(fp, "%d\t%d\t0\n", line_a_num, five_digit_p * -1);
         fprintf(fp, "%d\t%d\t0\n", line_b_num, five_digit_p * -1);
