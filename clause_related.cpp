@@ -42,7 +42,7 @@ status remove_literal_from_clause(vector<int> &v, int literal) //remove the cert
                 count--;
                 i = v.begin() + count;
             }
-            else if (v.size() != 0)
+            else if(v.size()!=0)
             {
                 i = v.begin();
             }
@@ -81,7 +81,7 @@ status update_by_unit(cnf_node &current_node, int literal) //update the current 
                 count--;
                 i = current_node.matrix.begin() + count;
             }
-            else if (current_node.matrix.size() != 0)
+            else if(current_node.matrix.size()!=0)//no need to check if the vertex reach the end
             {
                 i = current_node.matrix.begin();
             }
@@ -89,6 +89,7 @@ status update_by_unit(cnf_node &current_node, int literal) //update the current 
             {
                 break;
             }
+            
         }
         else if (check_literal_clause(*i, oppo_literal) == 1)
         {
