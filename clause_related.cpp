@@ -34,11 +34,21 @@ status remove_literal_from_clause(vector<int> &v, int literal) //remove the cert
 {
     while (v.back() == literal)
         v.pop_back();
-    for (auto i = v.begin(); i != v.end(); i++)
+    int count=0;
+    for (auto i = v.begin(); i != v.end(); i++,count++)
         if (*i == literal)
         {
             v.erase(i); //maybe it contain the same literal
-            i = v.begin();
+            if(count>0)
+            {
+                count--;
+                i = v.begin()+count;
+            }
+            else
+            {
+                i = v.begin();
+            }
+            
         }
     v.shrink_to_fit();
     return ok;
@@ -65,12 +75,21 @@ status update_by_unit(cnf_node &current_node, int literal) //update the current 
         if (current_node.matrix.size() == 0)
             break;
     }
-    for (auto i = current_node.matrix.begin(); i != current_node.matrix.end(); i++)
+    int count = 0;
+    for (auto i = current_node.matrix.begin(); i != current_node.matrix.end(); i++, count++)
     {
         if (check_literal_clause(*i, literal) == 1)
         {
             current_node.matrix.erase(i); //delete the whole clause
-            i = current_node.matrix.begin();
+            if (count > 0)
+            {
+                count--;
+                i = current_node.matrix.begin() + count;
+            }
+            else
+            {
+                i = current_node.matrix.begin();
+            }
         }
         else if (check_literal_clause(*i, oppo_literal) == 1)
         {
@@ -84,7 +103,7 @@ status update_by_unit(cnf_node &current_node, int literal) //update the current 
 
 cnf_node add_unit_clause(cnf_node &current_node, int literal) //add new unit clauses into the cnf clauses set the node is new
 {
-    cnf_node new_node=current_node;
+    cnf_node new_node = current_node;
     vector<int> new_unit_clause(1, literal);
     new_node.matrix.push_back(new_unit_clause);
     new_node.clauses_num = current_node.matrix.size();
