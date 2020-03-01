@@ -48,6 +48,7 @@ status read_cnf_file(cnf_node &node, char *filename)
     return ok;
 }
 
+
 status show_cnf_node(cnf_node &my_node)
 {
     int i, j;
