@@ -3,8 +3,10 @@
 status generate_clauses(char filename[81], int size) //store the clauses in filename file
 {
     FILE *fp;
-    strcat(filename, ".cnf");
-    fp = fopen(filename, "w");
+    char filename_open[81];
+    strcpy(filename_open,filename);
+    strcat(filename_open, ".cnf");
+    fp = fopen(filename_open, "w");
     if (fp == NULL)
     {
         cout << "overflow" << endl;
@@ -12,7 +14,7 @@ status generate_clauses(char filename[81], int size) //store the clauses in file
     }
     generate_by_rule1(fp, size);
     generate_by_rule2(fp, size);
-    //generate_by_rule3(fp, size);
+    generate_by_rule3(fp, size);
     fclose(fp);
     return ok;
 }
@@ -54,14 +56,14 @@ void generate_by_rule2(FILE *fp, int size) //generate clauses by rule 2
     Combination_All(0, 0, Have_Get, size, size / 2 + 1, fp, num_list);
 }
 
-int Combination_count(int N, int K)
+int Combination_count(int n, int k)
 {
-    if (K == 1)
-        return N;
-    else if (N == K || K == 0)
+    if (n == k || k == 0)
         return 1;
+    else if (k == 1)
+        return n;
     else
-        return Combination_count(N - 1, K - 1) + Combination_count(N - 1, K);
+        return Combination_count(n - 1, k - 1) + Combination_count(n - 1, k);
 }
 
 int Combination_All(int Position, int Have_In, list<int> Have_Get, int size, int need_get, FILE *fp, int *Num_list)
@@ -116,12 +118,68 @@ int Combination_All(int Position, int Have_In, list<int> Have_Get, int size, int
     }
 }
 
-void generate_by_rule3(FILE *fp, int size)           //generate clauses by rule 3
+void generate_by_rule3(FILE *fp, int size) //generate clauses by rule 3
 {
-    
+    int i, j; // i is line_a j is line_b
+
+    for (i = 1; i <= size; i++)
+    {
+        for (j = i + 1; j <= size; j++)
+        {
+            rule3_gen_clauses(fp, 1, i, j, size); //row
+            rule3_gen_clauses(fp, 2, i, j, size); //column
+        }
+    }
 }
 
-int reverse(int original, int size)
+void rule3_gen_clauses(FILE *fp, int row_or_column, int line_a, int line_b, int size) //row is 1 and column is 2
+{
+    int i;
+    int five_digit_p, five_digit_n, four_digit, three_digit;
+    int line_a_num, line_b_num;
+    three_digit = row_or_column * 100 + line_a * 10 + line_b;
+    for (i = 1; i <= size; i++)
+    {
+        if (row_or_column == 1)
+        {
+            line_a_num = line_a * 10 + i;
+            line_b_num = line_b * 10 + i;
+        }
+        else
+        {
+            line_a_num = 10 * i + line_a;
+            line_b_num = 10 * i + line_b;
+        }
+
+        five_digit_p = row_or_column * 10000 + line_a * 1000 + line_b * 100 + i * 10 + 1; //positive one
+        fprintf(fp, "%d\t%d\t0\n", line_a_num, five_digit_p * -1);
+        fprintf(fp, "%d\t%d\t0\n", line_b_num, five_digit_p * -1);
+        fprintf(fp, "%d\t%d\t%d\t0\n", (line_a_num) * -1, (line_b_num) * -1, five_digit_p);
+
+        five_digit_n = row_or_column * 10000 + line_a * 1000 + line_b * 100 + i * 10; //negative one
+        fprintf(fp, "%d\t%d\t0\n", (line_a_num) * -1, five_digit_n * -1);
+        fprintf(fp, "%d\t%d\t0\n", (line_b_num) * -1, five_digit_n * -1);
+        fprintf(fp, "%d\t%d\t%d\t0\n", (line_a_num), (line_b_num), five_digit_n);
+
+        four_digit = row_or_column * 1000 + line_a * 100 + line_b * 10 + i; //four digit var
+        fprintf(fp, "%d\t%d\t0\n", five_digit_p * -1, four_digit);
+        fprintf(fp, "%d\t%d\t0\n", five_digit_n * -1, four_digit);
+        fprintf(fp, "%d\t%d\t%d\t0\n", five_digit_p, five_digit_n, four_digit * -1);
+
+        //three and four digit one
+        fprintf(fp, "%d\t%d\t0\n", four_digit, three_digit);
+    }
+    //three and four digit one
+    fprintf(fp, "%d\t", three_digit * -1);
+    for (i = 1; i <= size; i++)
+    {
+        four_digit = row_or_column * 1000 + line_a * 100 + line_b * 10 + i;
+        fprintf(fp, "%d\t", four_digit * -1);
+    }
+    fprintf(fp, "0\n");
+}
+
+int reverse(int original, int size) //use it to read binary soduku file
 {
     if (original <= 0)
     {
@@ -131,5 +189,5 @@ int reverse(int original, int size)
     int i, j;
     i = original / 10;
     j = original % 10;
-    return size*(i-1)+j;
+    return size * (i - 1) + j;
 }

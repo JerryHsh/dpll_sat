@@ -2,22 +2,20 @@
 
 void print_weight(cnf_node &node)
 {
-    int i;
-    for (i = 0; i <= node.literals_num; i++)
+    for (auto iterator = node.weight_dict.begin(); iterator != node.weight_dict.end(); iterator++)
     {
-        cout << i << ": positive: " << node.weight[i][positive] << " negative: " << node.weight[i][negative] << endl;
+        cout << iterator->first << ": positive: " << iterator->second[positive] << " negative: " << iterator->second[negative] << endl;
     }
 }
 
 void print_result(cnf_node &node)
 {
-    int i;
-    for (i = 0; i <= node.literals_num; i++)
+    for (auto i = node.result_dict.begin(); i != node.result_dict.end(); i++)
     {
-        cout << "literal: " << i << ": ";
-        if (node.result[i] == 1)
+        cout << "literal: " << i->first << ": ";
+        if (i->second == True)
             cout << "true";
-        else if (node.result[i] == 0)
+        else if (i->second == False)
             cout << "false";
         else
             cout << "unassigned";

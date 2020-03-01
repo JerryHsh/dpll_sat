@@ -1,30 +1,20 @@
 #include "dpll_solution.h"
 
-status solver(char *filename)
+status solver(char *filename, cnf_node &node)
 {
     //do preparation
     int search_node = 0;
     double processing_time;
     time_t start, end;
     start = clock();
-    cnf_node node;
     //test the function
     //end test
     //solution begin
-    if (read_cnf_file(node, filename) == ok)
-    {
-        if (dpll_algorithm(node, filename, search_node) == satisfied)
-            cout << "dpll success" << endl;
-        else
-        {
-            cout<<"fail to find a solution"<<endl;
-        }
-        
-    }
+    if (dpll_algorithm(node, filename, search_node) == satisfied)
+        cout << "dpll success" << endl;
     else
     {
-        cout<<"can't read the file"<<endl;
-        return wrong;
+        cout << "fail to find a solution" << endl;
     }
     //end solution
     end = clock();
@@ -36,19 +26,32 @@ status solver(char *filename)
 solution_status dpll_algorithm(cnf_node current_node, char *filename, int &search_node) //the main function
 {
     search_node++;
-    //if (search_node % 1 == 0)
-    //getchar(), getchar();
-    //cout << "\n\ntotal search node: " << search_node << " matrix size: " << current_node.matrix.size() << "**************************************************************************************************************" << endl; //debug
-    //show_cnf_node(current_node);                                                                                                                                                                                                    //debug
+    /*
+    if (search_node % 1 == 0)
+      {
+          show_cnf_node(current_node);
+          getchar();
+      }
+    */
+    if (search_node % 2 == 0)
+    {
+        system("clear");
+        cout << "total search node: " << search_node << " matrix size: " << current_node.matrix.size() << endl; //debug
+    }                                                                                                           //debug
     int unit_literal = 0;
     while ((unit_literal = find_unit_literal(current_node)) != 0)
     {
         //cout << "the new found unit literal: " << unit_literal << endl;
         update_by_unit(current_node, unit_literal);
-        //  show_cnf_node(current_node);
+        //getchar();
+        //show_cnf_node(current_node);
         if (current_node.matrix.size() == 0)
         {
             store_result(filename, current_node, search_node);
+            {
+                system("clear");
+                cout << "total search node: " << search_node << " matrix size: " << current_node.matrix.size() << endl; //debug
+            }
             cout << "satisfied*******************************************************" << endl;
             return satisfied;
         }
