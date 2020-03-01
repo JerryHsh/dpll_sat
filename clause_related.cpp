@@ -32,23 +32,24 @@ int check_literal_clause(vector<int> v, int literal) //check if the clause conta
 
 status remove_literal_from_clause(vector<int> &v, int literal) //remove the certain literal from the clause
 {
-    while (v.back() == literal)
-        v.pop_back();
-    int count=0;
-    for (auto i = v.begin(); i != v.end(); i++,count++)
+    int count = 0;
+    for (auto i = v.begin(); i != v.end(); i++, count++)
         if (*i == literal)
         {
             v.erase(i); //maybe it contain the same literal
-            if(count>0)
+            if (count > 0)
             {
                 count--;
-                i = v.begin()+count;
+                i = v.begin() + count;
             }
-            else
+            else if (v.size() != 0)
             {
                 i = v.begin();
             }
-            
+            else
+            {
+                break;
+            }
         }
     v.shrink_to_fit();
     return ok;
@@ -69,12 +70,6 @@ status update_by_unit(cnf_node &current_node, int literal) //update the current 
     int oppo_literal = literal * (-1);
     //debug begin
     //debug end
-    while (check_literal_clause(current_node.matrix.back(), literal) == 1)
-    {
-        current_node.matrix.pop_back();
-        if (current_node.matrix.size() == 0)
-            break;
-    }
     int count = 0;
     for (auto i = current_node.matrix.begin(); i != current_node.matrix.end(); i++, count++)
     {
@@ -86,9 +81,13 @@ status update_by_unit(cnf_node &current_node, int literal) //update the current 
                 count--;
                 i = current_node.matrix.begin() + count;
             }
-            else
+            else if (current_node.matrix.size() != 0)
             {
                 i = current_node.matrix.begin();
+            }
+            else
+            {
+                break;
             }
         }
         else if (check_literal_clause(*i, oppo_literal) == 1)
