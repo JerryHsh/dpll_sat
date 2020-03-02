@@ -18,7 +18,7 @@ status read_sodoku_cnf(cnf_node &node, char *filename, int size)
         printf("The sodoku file doesn't exist\n");
         return wrong;
     }
-    node.clauses_num = 4 * size * (size - 2) + 4 * Combination_count(size, size / 2 + 1) * size + 2 * Combination_count(size, 2) * (10 * size + 1);
+    node.clauses_num = 4 * size * (size - 2) + 4 * Combination_count(size, size / 2 + 1) * size + 2 * Combination_count(size, 2) * (10 * size + 1)+2*Combination_count(size,2);
     cout << node.clauses_num << endl;
     node.literals_num = size ^ 2 + 2 * Combination_count(size, 2) * (1 + 3 * size);
     int literal;

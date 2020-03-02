@@ -4,7 +4,7 @@ status generate_clauses(char filename[81], int size) //store the clauses in file
 {
     FILE *fp;
     char filename_open[81];
-    strcpy(filename_open,filename);
+    strcpy(filename_open, filename);
     strcat(filename_open, ".cnf");
     fp = fopen(filename_open, "w");
     if (fp == NULL)
@@ -177,4 +177,5 @@ void rule3_gen_clauses(FILE *fp, int row_or_column, int line_a, int line_b, int 
         fprintf(fp, "%d\t", four_digit * -1);
     }
     fprintf(fp, "0\n");
+    fprintf(fp, "%d\t0\n", three_digit);
 }
