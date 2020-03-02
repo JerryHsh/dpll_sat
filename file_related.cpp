@@ -132,7 +132,7 @@ status store_result(char *filename, cnf_node &node, int search_node)
     fp = fopen(store_file, "w");
     if (fp == NULL)
         return overflow;
-    if (node.size != -100)
+    if (node.size == 0)
     {
         fprintf(fp, "#the total search node is %d\n", search_node);
         fprintf(fp, "#result***********************************************\n");
@@ -149,7 +149,6 @@ status store_result(char *filename, cnf_node &node, int search_node)
     }
     else
     {
-        fprintf(fp, "%d\n", node.size);
         for (int i = 1; i <= node.size; i++)
         {
             for (int j = 1; j <= node.size; j++)

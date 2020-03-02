@@ -23,9 +23,9 @@ int main()
         read_sodoku_cnf(node, filename, size);
         solver(filename, node);
         puzzel_node p_node;
-        //initialize_puzzel_node(p_node,size);
-        //read_sodoku_result(p_node,filename);
-        //show_puzzel_desk(p_node);
+        initialize_puzzel_node(p_node,size);
+        read_sodoku_result(p_node,filename);
+        show_puzzel_desk(p_node);
     }
     return 0;
 }

@@ -58,27 +58,32 @@ status show_puzzel_desk(puzzel_node puzzel_node) //print the chess desk on the s
 }
 status read_sodoku_result(puzzel_node &node, char *filename)
 {
-    FILE *fp;
     char filename_open[81];
     strcpy(filename_open, filename);
     strcat(filename_open, ".res");
+    cout << filename_open << endl;
+    FILE *fp;
     fp = fopen(filename_open, "r");
     if (fp == NULL)
+    {
+        cout << "no such file" << endl;
         return wrong;
-    fscanf(fp, "%d", &node.size);
+    }
+    cout << "size: " << node.size << endl;
     int temp_order_store;
     for (int i = 0; i < node.size * node.size; i++)
     {
         fscanf(fp, "%d", &temp_order_store);
         fscanf(fp, "%d", &node.puzzel_desk[temp_order_store - 1]);
     }
+    fclose(fp);
     return ok;
 }
 
 status initialize_puzzel_node(puzzel_node &node, int size)
 {
     node.size = size;
-    node.puzzel_desk = (value *)malloc((size ^ 2) * sizeof(value));
+    node.puzzel_desk = (value *)malloc((size * size) * sizeof(value));
     if (node.puzzel_desk == NULL)
         exit(overflow);
     for (int i = 0; i < size * size; i++)
