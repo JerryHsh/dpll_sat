@@ -178,16 +178,3 @@ void rule3_gen_clauses(FILE *fp, int row_or_column, int line_a, int line_b, int 
     }
     fprintf(fp, "0\n");
 }
-
-int reverse(int original, int size) //use it to read binary soduku file
-{
-    if (original <= 0)
-    {
-        cout << "wrong input" << endl;
-        exit(wrong);
-    }
-    int i, j;
-    i = original / 10;
-    j = original % 10;
-    return size * (i - 1) + j;
-}

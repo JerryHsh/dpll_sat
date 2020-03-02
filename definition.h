@@ -18,7 +18,7 @@ const status ok = 1;
 const status wrong = 0;
 const status overflow = -1;
 
-typedef short value;
+typedef int value;
 
 const value True = 1;
 const value False = 0;
@@ -41,6 +41,15 @@ typedef struct
     map<int, value> result_dict; //subsititute for result
     //float **weight;              //an 2darray store the current literal weight begin with 1
     map<int, float *> weight_dict;
+    int size; //normal dpll the size is 0
 } cnf_node;
+
+
+typedef struct 
+{
+    value *puzzel_desk;
+    int size;
+}puzzel_node;
+
 
 #endif // !DEFINITION_H
