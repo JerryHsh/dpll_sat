@@ -8,17 +8,18 @@ void get_filename(char *filename)
 status read_sodoku_cnf(cnf_node &node, char *filename, int size)
 {
     FILE *fp;
+    node.size = size;
     char filename_open[81];
     strcpy(filename_open, filename);
     strcat(filename_open, ".cnf");
-    cout<<filename<<endl;
+    cout << filename << endl;
     if ((fp = fopen(filename_open, "r")) == NULL)
     {
         printf("The sodoku file doesn't exist\n");
         return wrong;
     }
-    node.clauses_num = 4 * size * (size - 2) + 4 * Combination_count(size, size / 2 + 1) * size + 2 * Combination_count(size, 2) * (10 * size + 1);
-    cout<<node.clauses_num<<endl;
+    node.clauses_num = 4 * size * (size - 2) + 4 * Combination_count(size, size / 2 + 1) * size + 2 * Combination_count(size, 2) * (9 * size + 1);
+    cout << node.clauses_num << endl;
     node.literals_num = size ^ 2 + 2 * Combination_count(size, 2) * (1 + 3 * size);
     int literal;
     vector<int> clause_store;
@@ -43,6 +44,7 @@ status read_sodoku_cnf(cnf_node &node, char *filename, int size)
 status read_cnf_file(cnf_node &node, char *filename)
 {
     FILE *fp;
+    node.size = 0;
     char filename_open[81];
     strcpy(filename_open, filename);
     strcat(filename_open, ".cnf");
@@ -115,14 +117,14 @@ status store_time(char *filename, double time)
     fp = fopen(store_file, "a");
     if (fp == NULL)
         return wrong;
-    fprintf(fp, "t:%.0fms", time * 1000);
+    fprintf(fp, "#t:%.0fms", time * 1000);
     fclose(fp);
     return ok;
 }
 
 status store_result(char *filename, cnf_node &node, int search_node)
 {
-    cout<<"******************************enter the store result"<<endl;
+    cout << "******************************enter the store result" << endl;
     FILE *fp;
     char store_file[81];
     strcpy(store_file, filename);
@@ -130,23 +132,27 @@ status store_result(char *filename, cnf_node &node, int search_node)
     fp = fopen(store_file, "w");
     if (fp == NULL)
         return overflow;
-    fprintf(fp, "the total search node is %d\n", search_node);
-    int i;
-    fprintf(fp, "result***********************************************\n");
-    for (auto iterator = node.result_dict.begin(); iterator != node.result_dict.end(); iterator++)
+    if (node.size == 0)
     {
-        fprintf(fp, "literal: %d\t", iterator->first);
-        if (iterator->second == True)
+        fprintf(fp, "#the total search node is %d\n", search_node);
+        fprintf(fp, "#result***********************************************\n");
+        for (auto iterator = node.result_dict.begin(); iterator != node.result_dict.end(); iterator++)
         {
-            fprintf(fp, "True\n");
+            fprintf(fp, "literal: %d\t", iterator->first);
+            if (iterator->second == True)
+                fprintf(fp, "True\n");
+            else if (iterator->second == False)
+                fprintf(fp, "False\n");
+            else
+                fprintf(fp, "Unassigned\n");
         }
-        else if (iterator->second == False)
+    }
+    else
+    {
+        for (int i = 1; i <= node.size; i++)
         {
-            fprintf(fp, "False\n");
-        }
-        else
-        {
-            fprintf(fp, "unassigned\n");
+            for (int j = 1; j <= node.size; j++)
+                fprintf(fp, "%d\t%d\n", (i - 1) * node.size + j, node.result_dict[i * 10 + j]);
         }
     }
     fclose(fp);
@@ -200,10 +206,10 @@ void initialize_dict_info(cnf_node &mynode, int size)
             three_digit_row = 100 + i * 10 + j;
             three_digit_column = 200 + i * 10 + j;
             //row
-            initialize_dict_by_number(mynode, three_digit_row);
+            initialize_dict_by_number(mynode, three_digit_row,1);
             intialize_dict_according_to_three_digit(mynode, size, three_digit_row);
             //column
-            initialize_dict_by_number(mynode, three_digit_column);
+            initialize_dict_by_number(mynode, three_digit_column,1);
             intialize_dict_according_to_three_digit(mynode, size, three_digit_column);
         }
     }
@@ -217,9 +223,12 @@ void initialize_weight_dict(cnf_node &node, int number)
     node.weight_dict[number][negative] = -1;
 }
 
-void initialize_dict_by_number(cnf_node &node, int number)
+void initialize_dict_by_number(cnf_node &node, int number,int flag)//use flag to check if it is three digit
 {
-    node.result_dict[number] = unassigned;
+    if (flag==1)
+        node.result_dict[number] = True;
+    else
+        node.result_dict[number] = unassigned;
     initialize_weight_dict(node, number);
 }
 

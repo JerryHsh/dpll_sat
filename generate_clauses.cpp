@@ -4,7 +4,7 @@ status generate_clauses(char filename[81], int size) //store the clauses in file
 {
     FILE *fp;
     char filename_open[81];
-    strcpy(filename_open,filename);
+    strcpy(filename_open, filename);
     strcat(filename_open, ".cnf");
     fp = fopen(filename_open, "w");
     if (fp == NULL)
@@ -167,27 +167,15 @@ void rule3_gen_clauses(FILE *fp, int row_or_column, int line_a, int line_b, int 
         fprintf(fp, "%d\t%d\t%d\t0\n", five_digit_p, five_digit_n, four_digit * -1);
 
         //three and four digit one
-        fprintf(fp, "%d\t%d\t0\n", four_digit, three_digit);
+        //fprintf(fp, "%d\t%d\t0\n", four_digit, three_digit);
     }
     //three and four digit one
-    fprintf(fp, "%d\t", three_digit * -1);
+    //fprintf(fp, "%d\t", three_digit * -1);
     for (i = 1; i <= size; i++)
     {
         four_digit = row_or_column * 1000 + line_a * 100 + line_b * 10 + i;
         fprintf(fp, "%d\t", four_digit * -1);
     }
     fprintf(fp, "0\n");
-}
-
-int reverse(int original, int size) //use it to read binary soduku file
-{
-    if (original <= 0)
-    {
-        cout << "wrong input" << endl;
-        exit(wrong);
-    }
-    int i, j;
-    i = original / 10;
-    j = original % 10;
-    return size * (i - 1) + j;
+    //fprintf(fp, "%d\t0\n", three_digit);
 }
