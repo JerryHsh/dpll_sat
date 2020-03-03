@@ -56,6 +56,7 @@ status show_puzzel_desk(puzzel_node puzzel_node) //print the chess desk on the s
     }
     return ok;
 }
+
 status read_sodoku_result(puzzel_node &node, char *filename)
 {
     char filename_open[81];
