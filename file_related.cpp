@@ -132,30 +132,34 @@ status store_result(char *filename, cnf_node &node, int search_node)
     fp = fopen(store_file, "w");
     if (fp == NULL)
         return overflow;
-    if (node.size == 0)
+    fprintf(fp, "#the total search node is %d\n", search_node);
+    fprintf(fp, "#result***********************************************\n");
+    for (auto iterator = node.result_dict.begin(); iterator != node.result_dict.end(); iterator++)
     {
-        fprintf(fp, "#the total search node is %d\n", search_node);
-        fprintf(fp, "#result***********************************************\n");
-        for (auto iterator = node.result_dict.begin(); iterator != node.result_dict.end(); iterator++)
-        {
-            fprintf(fp, "literal: %d\t", iterator->first);
-            if (iterator->second == True)
-                fprintf(fp, "True\n");
-            else if (iterator->second == False)
-                fprintf(fp, "False\n");
-            else
-                fprintf(fp, "Unassigned\n");
-        }
+        fprintf(fp, "literal: %d\t", iterator->first);
+        if (iterator->second == True)
+            fprintf(fp, "True\n");
+        else if (iterator->second == False)
+            fprintf(fp, "False\n");
+        else
+            fprintf(fp, "Unassigned\n");
     }
-    else
+    fclose(fp);
+    if (node.size != 0)
     {
+        strcpy(store_file, "");
+        strcpy(store_file, filename);
+        strcat(store_file, ".sod");
+        fp = fopen(store_file, "w");
+        if(fp==NULL)
+        return overflow;
         for (int i = 1; i <= node.size; i++)
         {
             for (int j = 1; j <= node.size; j++)
                 fprintf(fp, "%d\t%d\n", (i - 1) * node.size + j, node.result_dict[i * 10 + j]);
         }
+        fclose(fp);
     }
-    fclose(fp);
     return ok;
 }
 
@@ -206,10 +210,10 @@ void initialize_dict_info(cnf_node &mynode, int size)
             three_digit_row = 100 + i * 10 + j;
             three_digit_column = 200 + i * 10 + j;
             //row
-            initialize_dict_by_number(mynode, three_digit_row,1);
+            initialize_dict_by_number(mynode, three_digit_row, 1);
             intialize_dict_according_to_three_digit(mynode, size, three_digit_row);
             //column
-            initialize_dict_by_number(mynode, three_digit_column,1);
+            initialize_dict_by_number(mynode, three_digit_column, 1);
             intialize_dict_according_to_three_digit(mynode, size, three_digit_column);
         }
     }
@@ -223,9 +227,9 @@ void initialize_weight_dict(cnf_node &node, int number)
     node.weight_dict[number][negative] = -1;
 }
 
-void initialize_dict_by_number(cnf_node &node, int number,int flag)//use flag to check if it is three digit
+void initialize_dict_by_number(cnf_node &node, int number, int flag) //use flag to check if it is three digit
 {
-    if (flag==1)
+    if (flag == 1)
         node.result_dict[number] = True;
     else
         node.result_dict[number] = unassigned;

@@ -60,8 +60,7 @@ status read_sodoku_result(puzzel_node &node, char *filename)
 {
     char filename_open[81];
     strcpy(filename_open, filename);
-    strcat(filename_open, ".res");
-    cout << filename_open << endl;
+    strcat(filename_open, ".sod");
     FILE *fp;
     fp = fopen(filename_open, "r");
     if (fp == NULL)
@@ -69,7 +68,6 @@ status read_sodoku_result(puzzel_node &node, char *filename)
         cout << "no such file" << endl;
         return wrong;
     }
-    cout << "size: " << node.size << endl;
     int temp_order_store;
     for (int i = 0; i < node.size * node.size; i++)
     {
