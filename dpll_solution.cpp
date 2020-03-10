@@ -26,13 +26,6 @@ status solver(char *filename, cnf_node &node)
 solution_status dpll_algorithm(cnf_node current_node, char *filename, int &search_node) //the main function
 {
     search_node++;
-    /*
-    if (search_node % 1 == 0)
-      {
-          show_cnf_node(current_node);
-          getchar();
-      }
-    */
     if (search_node % 2 == 0)
     {
         system("clear");
@@ -41,10 +34,7 @@ solution_status dpll_algorithm(cnf_node current_node, char *filename, int &searc
     int unit_literal = 0;
     while ((unit_literal = find_unit_literal(current_node)) != 0)
     {
-        //cout << "the new found unit literal: " << unit_literal << endl;
         update_by_unit(current_node, unit_literal);
-        //getchar();
-        //show_cnf_node(current_node);
         if (current_node.matrix.size() == 0)
         {
             store_result(filename, current_node, search_node);
@@ -60,8 +50,9 @@ solution_status dpll_algorithm(cnf_node current_node, char *filename, int &searc
     }
     //give the unit literal a new value generate by branching function
     calculate_weight(current_node);
+    //  show_cnf_node(current_node);//debug
     unit_literal = render_new_unit(current_node);
-    //cout << "selected literal: " << unit_literal << endl;
+    //    cout << "selected literal: " << unit_literal << endl;
     if (dpll_algorithm(add_unit_clause(current_node, unit_literal), filename, search_node) == satisfied)
         return satisfied;
     else

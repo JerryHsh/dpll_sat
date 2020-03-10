@@ -102,9 +102,9 @@ status show_cnf_node(cnf_node &my_node)
         cout << endl;
     }
     cout << "print each node's weight*********************************************************" << endl;
-    //print_weight(my_node);
+    print_weight(my_node);
     cout << "print each node's result*********************************************************" << endl;
-    //print_result(my_node);
+    print_result(my_node);
     return ok;
 }
 
@@ -132,9 +132,13 @@ status store_result(char *filename, cnf_node &node, int search_node)
     fp = fopen(store_file, "w");
     if (fp == NULL)
         return overflow;
+<<<<<<< HEAD
     fprintf(fp, "#the total search node is %d\n", search_node);
     fprintf(fp, "#result***********************************************\n");
     for (auto iterator = node.result_dict.begin(); iterator != node.result_dict.end(); iterator++)
+=======
+    if (node.size == 0) //store the normal file
+>>>>>>> dev
     {
         fprintf(fp, "literal: %d\t", iterator->first);
         if (iterator->second == True)
@@ -144,8 +148,12 @@ status store_result(char *filename, cnf_node &node, int search_node)
         else
             fprintf(fp, "Unassigned\n");
     }
+<<<<<<< HEAD
     fclose(fp);
     if (node.size != 0)
+=======
+    else //store a sodoku file
+>>>>>>> dev
     {
         strcpy(store_file, "");
         strcpy(store_file, filename);
@@ -156,7 +164,7 @@ status store_result(char *filename, cnf_node &node, int search_node)
         for (int i = 1; i <= node.size; i++)
         {
             for (int j = 1; j <= node.size; j++)
-                fprintf(fp, "%d\t%d\n", (i - 1) * node.size + j, node.result_dict[i * 10 + j]);
+                fprintf(fp, "%d\t%d\n", (i - 1) * node.size + j, node.result_dict[i * 10 + j]); //a continuous sequence begin with 1
         }
         fclose(fp);
     }
