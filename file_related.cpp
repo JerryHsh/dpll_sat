@@ -132,13 +132,9 @@ status store_result(char *filename, cnf_node &node, int search_node)
     fp = fopen(store_file, "w");
     if (fp == NULL)
         return overflow;
-<<<<<<< HEAD
     fprintf(fp, "#the total search node is %d\n", search_node);
     fprintf(fp, "#result***********************************************\n");
     for (auto iterator = node.result_dict.begin(); iterator != node.result_dict.end(); iterator++)
-=======
-    if (node.size == 0) //store the normal file
->>>>>>> dev
     {
         fprintf(fp, "literal: %d\t", iterator->first);
         if (iterator->second == True)
@@ -148,12 +144,8 @@ status store_result(char *filename, cnf_node &node, int search_node)
         else
             fprintf(fp, "Unassigned\n");
     }
-<<<<<<< HEAD
     fclose(fp);
     if (node.size != 0)
-=======
-    else //store a sodoku file
->>>>>>> dev
     {
         strcpy(store_file, "");
         strcpy(store_file, filename);
