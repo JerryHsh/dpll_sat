@@ -18,7 +18,7 @@ status read_sodoku_cnf(cnf_node &node, char *filename, int size)
         printf("The sodoku file doesn't exist\n");
         return wrong;
     }
-    node.clauses_num = 4 * size * (size - 2) + 4 * Combination_count(size, size / 2 + 1) * size + 2 * Combination_count(size, 2) * (10 * size + 1)+2*Combination_count(size,2);
+    node.clauses_num = 4 * size * (size - 2) + 4 * Combination_count(size, size / 2 + 1) * size + 2 * Combination_count(size, 2) * (10 * size + 1) + 2 * Combination_count(size, 2);
     cout << node.clauses_num << endl;
     node.literals_num = size ^ 2 + 2 * Combination_count(size, 2) * (1 + 3 * size);
     int literal;
@@ -102,9 +102,9 @@ status show_cnf_node(cnf_node &my_node)
         cout << endl;
     }
     cout << "print each node's weight*********************************************************" << endl;
-    //print_weight(my_node);
+    print_weight(my_node);
     cout << "print each node's result*********************************************************" << endl;
-    //print_result(my_node);
+    print_result(my_node);
     return ok;
 }
 
@@ -132,7 +132,7 @@ status store_result(char *filename, cnf_node &node, int search_node)
     fp = fopen(store_file, "w");
     if (fp == NULL)
         return overflow;
-    if (node.size == 0)
+    if (node.size == 0) //store the normal file
     {
         fprintf(fp, "#the total search node is %d\n", search_node);
         fprintf(fp, "#result***********************************************\n");
@@ -147,12 +147,12 @@ status store_result(char *filename, cnf_node &node, int search_node)
                 fprintf(fp, "Unassigned\n");
         }
     }
-    else
+    else //store a sodoku file
     {
         for (int i = 1; i <= node.size; i++)
         {
             for (int j = 1; j <= node.size; j++)
-                fprintf(fp, "%d\t%d\n", (i - 1) * node.size + j, node.result_dict[i * 10 + j]);
+                fprintf(fp, "%d\t%d\n", (i - 1) * node.size + j, node.result_dict[i * 10 + j]); //a continuous sequence begin with 1
         }
     }
     fclose(fp);
