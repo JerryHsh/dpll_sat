@@ -210,10 +210,10 @@ void initialize_dict_info(cnf_node &mynode, int size)
             three_digit_row = 100 + i * 10 + j;
             three_digit_column = 200 + i * 10 + j;
             //row
-            initialize_dict_by_number(mynode, three_digit_row, 1);
+            initialize_dict_by_number(mynode, three_digit_row, 1);//initialize the three digit num
             intialize_dict_according_to_three_digit(mynode, size, three_digit_row);
             //column
-            initialize_dict_by_number(mynode, three_digit_column, 1);
+            initialize_dict_by_number(mynode, three_digit_column, 1);//initialize the three digit num
             intialize_dict_according_to_three_digit(mynode, size, three_digit_column);
         }
     }

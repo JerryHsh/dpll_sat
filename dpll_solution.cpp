@@ -37,12 +37,13 @@ solution_status dpll_algorithm(cnf_node current_node, char *filename, int &searc
         update_by_unit(current_node, unit_literal);
         if (current_node.matrix.size() == 0)
         {
-            store_result(filename, current_node, search_node);
+            if (filename != NULL)
+                store_result(filename, current_node, search_node);
             {
                 system("clear");
                 cout << "total search node: " << search_node << " matrix size: " << current_node.matrix.size() << endl; //debug
+                cout << "satisfied*******************************************************" << endl;
             }
-            cout << "satisfied*******************************************************" << endl;
             return satisfied;
         }
         else if (check_empty_matrix(current_node) == 1)
