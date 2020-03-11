@@ -1,12 +1,12 @@
 #include "generate_sodoku.h"
 
 //check if the given position can be dug postion is a continuous sequence
-//if it's unique return ok else return wrong
+//if it's unique return unique else return common if it had been dug return dug
 //use default_node to store the rule of binary sodoku
 unique_status position_unique(cnf_node default_node, puzzel_node &current_node, int position)
 {
     puzzel_node node;
-    copy_puzzel_node(current_node, node);
+    copy_puzzel_node(current_node, node);//all the change happened in copy one
     if (node.puzzel_desk[position] == unassigned)
         return dug;
     else if (node.puzzel_desk[position] == True)
@@ -40,4 +40,31 @@ void copy_puzzel_node(puzzel_node src_node, puzzel_node &des_node)
     des_node.puzzel_desk = (value *)malloc(des_node.size * des_node.size * sizeof(value));
     for (int i = 0; i < des_node.size; i++)
         des_node.puzzel_desk[i] = src_node.puzzel_desk[i];
+}
+
+void initialize_mode(level_regulation &mode, int size)
+{
+    cout << "input the level: easy 1\tmedium 2\thard 3" << endl;
+input:
+    cin >> mode.mode;
+    if (mode.mode == 1)
+    {
+        mode.line_lower_bound = size / 2 + 1;
+        mode.total_lower_bound = size * size * 5 / 8;
+    }
+    else if (mode.mode == 2)
+    {
+        mode.line_lower_bound = size / 3;
+        mode.total_lower_bound = size * size * 3 / 8;
+    }
+    else if (mode.mode == 3)
+    {
+        mode.line_lower_bound = 0;
+        mode.total_lower_bound = size * size * 3 / 10;
+    }
+    else
+    {
+        cout << "wrong input" << endl;
+        goto input;
+    }
 }
