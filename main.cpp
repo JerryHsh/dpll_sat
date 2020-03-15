@@ -23,8 +23,15 @@ int main()
         read_sodoku_cnf(node, filename, size);
         solver(filename, node);
         puzzel_node p_node;
-        initialize_puzzel_node(p_node,size);
-        read_sodoku_result(p_node,filename);
+        initialize_puzzel_node(p_node, size);
+        read_sodoku_result(p_node, filename);
+        read_sodoku_result(p_node, filename);
+        generalize_easy_mode(node,p_node);
+        show_puzzel_desk(p_node);
+        generalize_medium_mode(node,p_node);
+        show_puzzel_desk(p_node);
+        read_sodoku_result(p_node, filename);
+        generalize_evil_mode(node,p_node);
         show_puzzel_desk(p_node);
     }
     return 0;

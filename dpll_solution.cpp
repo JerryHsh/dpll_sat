@@ -26,11 +26,13 @@ status solver(char *filename, cnf_node &node)
 solution_status dpll_algorithm(cnf_node current_node, char *filename, int &search_node) //the main function
 {
     search_node++;
-    if (search_node % 2 == 0)
-    {
-        system("clear");
-        cout << "total search node: " << search_node << " matrix size: " << current_node.matrix.size() << endl; //debug
-    }                                                                                                           //debug
+    if (search_node > 1000)
+        return over_limit; //debug
+    //if (search_node % 2 == 0)
+    //{
+        //system("clear");
+        //cout << "total search node: " << search_node << " matrix size: " << current_node.matrix.size() << endl; //debug
+    //}                                                                                                           //debug
     int unit_literal = 0;
     while ((unit_literal = find_unit_literal(current_node)) != 0)
     {
@@ -38,9 +40,9 @@ solution_status dpll_algorithm(cnf_node current_node, char *filename, int &searc
         if (current_node.matrix.size() == 0)
         {
             if (filename != NULL)
-                store_result(filename, current_node, search_node);
             {
-                system("clear");
+                store_result(filename, current_node, search_node);
+                //system("clear");
                 cout << "total search node: " << search_node << " matrix size: " << current_node.matrix.size() << endl; //debug
                 cout << "satisfied*******************************************************" << endl;
             }
@@ -54,8 +56,11 @@ solution_status dpll_algorithm(cnf_node current_node, char *filename, int &searc
     //  show_cnf_node(current_node);//debug
     unit_literal = render_new_unit(current_node);
     //    cout << "selected literal: " << unit_literal << endl;
-    if (dpll_algorithm(add_unit_clause(current_node, unit_literal), filename, search_node) == satisfied)
+    solution_status temp_store = dpll_algorithm(add_unit_clause(current_node, unit_literal), filename, search_node);
+    if (temp_store == satisfied)
         return satisfied;
+    else if (temp_store == over_limit)
+        return over_limit;
     else
     {
         //cout << "unsatisfied________________________________________________________________" << endl;

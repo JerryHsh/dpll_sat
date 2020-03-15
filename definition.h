@@ -28,6 +28,7 @@ typedef int solution_status;
 
 const solution_status satisfied = 1;
 const solution_status unsatisfied = 0;
+const solution_status over_limit=-1;
 
 // 0 means positive 1 means negatice
 const int positive = 0;

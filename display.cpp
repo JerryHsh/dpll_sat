@@ -48,7 +48,10 @@ status show_puzzel_desk(puzzel_node puzzel_node) //print the chess desk on the s
                 else
                 {
                     print_space(1);
-                    cout << puzzel_node.puzzel_desk[(i - 1) * puzzel_node.size + j - 1];
+                    if (puzzel_node.puzzel_desk[(i - 1) * puzzel_node.size + j - 1] != unassigned)
+                        cout << puzzel_node.puzzel_desk[(i - 1) * puzzel_node.size + j - 1];
+                    else
+                        cout << ' ';
                 }
             }
             cout << endl;
@@ -90,4 +93,9 @@ status initialize_puzzel_node(puzzel_node &node, int size)
         node.puzzel_desk[i] = unassigned;
     }
     return ok;
+}
+
+void free_puzzel_node(puzzel_node &node)
+{
+    free(node.puzzel_desk);
 }
