@@ -49,6 +49,7 @@ typedef struct
 typedef struct 
 {
     value *puzzel_desk;
+    value * answer;//store the answer of current node
     int size;
 }puzzel_node;
 

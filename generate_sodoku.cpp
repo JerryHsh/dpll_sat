@@ -80,7 +80,6 @@ status generalize_easy_mode(cnf_node default_node, puzzel_node &current_node) //
     initialize_mode(mode, current_node.size, 1);
     cout << "easy mode line lower: " << mode.line_lower_bound << "\tmode total lower: " << mode.total_lower_bound << endl;
     //using randomize sequence to generlize the sodoku
-    srand(unsigned(time(NULL)));
     puzzel_node info_node;                                //this node use to store the information we get when the programme is running
     initialize_puzzel_node(info_node, current_node.size); //unassigned in this term means haven't been search,true means can be dug  false means can't be dug
     int random_num = generate_random_int(current_node.size);
@@ -166,7 +165,7 @@ status check_total(level_regulation mode, puzzel_node current_node) //check the 
         if (current_node.puzzel_desk[i] != unassigned)
             count++;
     // cout << "the total not unassigned is :" << count << endl;
-    if (count < mode.total_lower_bound )
+    if (count < mode.total_lower_bound)
         return wrong;
     else
         return ok;
@@ -238,29 +237,33 @@ void copy_puzzel_node(puzzel_node &src_node, puzzel_node &des_node)
 {
     des_node.size = src_node.size;
     des_node.puzzel_desk = (value *)malloc(des_node.size * des_node.size * sizeof(value));
+    des_node.answer = (value *)malloc(des_node.size * des_node.size * sizeof(value));
     for (int i = 0; i < des_node.size * des_node.size; i++)
+    {
         des_node.puzzel_desk[i] = src_node.puzzel_desk[i];
+        des_node.answer[i] = src_node.answer[i];
+    }
 }
 
 void initialize_mode(level_regulation &mode, int size, int level) //store the mode information inside mode
 {
-    int rand_num = generate_random_int(size / 3+1)+1;
+    int rand_num = generate_random_int(size / 3 + 1) + 1;
     int i;
     mode.mode = level;
     if (mode.mode == 1) //easy mode
     {
         mode.line_lower_bound = size / 2;
-        mode.total_lower_bound = size * size * 5 / 8+rand_num;
+        mode.total_lower_bound = size * size * 5 / 8 + rand_num;
     }
     else if (mode.mode == 2) //medium mode
     {
         mode.line_lower_bound = size / 3;
-        mode.total_lower_bound = size * size * 3 / 8+rand_num;
+        mode.total_lower_bound = size * size * 3 / 8 + rand_num;
     }
     else if (mode.mode == 3) //evil mode
     {
         mode.line_lower_bound = 0;
-        mode.total_lower_bound = size * size * 3 / 10+rand_num;
+        mode.total_lower_bound = rand_num * 2;
     }
     else
     {
