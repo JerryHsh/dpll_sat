@@ -134,6 +134,8 @@ status play_sodoku(puzzel_node &p_node)
         show_puzzel_desk(player_node);
         cout << "enter value" << endl;
         cin >> player_node.puzzel_desk[(row - 1) * player_node.size + (column - 1)];
+        system("clear");
+        show_puzzel_desk(player_node);
         cout << "do you want to check your answer?0/1" << endl;
         cin >> choice;
         if (choice)
@@ -143,8 +145,6 @@ status play_sodoku(puzzel_node &p_node)
             else
                 cout << "the node has been correct" << endl;
         }
-        system("clear");
-        show_puzzel_desk(player_node);
     } while (check_win(player_node) == wrong);
     system("clear");
     show_puzzel_desk(player_node);
