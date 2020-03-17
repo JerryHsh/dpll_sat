@@ -111,16 +111,23 @@ status correct_node(puzzel_node &p_node) //check if the current node have wrong 
 
 status play_sodoku(puzzel_node &p_node)
 {
-    bool choice;
+    int choice;
     puzzel_node player_node;
     copy_puzzel_node(p_node, player_node);
     int row, column;
     system("clear");
     show_puzzel_desk(player_node);
-    do
+    while (1)
     {
         system("clear");
         show_puzzel_desk(player_node);
+        if (check_win(player_node) == ok)
+        {
+            cout << "you win" << endl;
+            getchar();
+            getchar();
+            break;
+        }
         cout << "which position do you want to fill\nrow:\tcolumn:" << endl;
         cin >> row;
         cin >> column;
@@ -139,21 +146,14 @@ status play_sodoku(puzzel_node &p_node)
         system("clear");
         show_puzzel_desk(player_node);
         cout << "do you want to check your answer?0/1" << endl;
+        cout << "if you want to exit enter 2" << endl;
         cin >> choice;
-        if (choice)
-        {
-            if (correct_node(player_node) == ok)
-                cout << "the current situation is right" << endl;
-            else
-                cout << "the node has been correct" << endl;
-        }
-    } while (check_win(player_node) == wrong);
-    system("clear");
-    show_puzzel_desk(player_node);
-    cout << "you win" << endl;
+        if (choice == 1)
+            correct_node(player_node);
+        else if (choice == 2)
+            break;
+    }
     free_puzzel_node(player_node);
-    getchar();
-    getchar();
     return ok;
 }
 
