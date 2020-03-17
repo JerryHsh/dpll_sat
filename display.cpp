@@ -1,5 +1,131 @@
 #include "display.h"
 
+status dpll_branch(void)
+{
+    int choice;
+    char filename[81]; //store the filename
+    while (1)
+    {
+        system("clear");
+        strcpy(filename, "");
+        get_filename(filename);
+        cnf_node node;
+        read_cnf_file(node, filename);
+        solver(filename, node);
+        getchar();
+        getchar();
+        system("clear");
+        cout << "do you have another dpll problem 0/1" << endl;
+        cin >> choice;
+        if (choice == 0)
+            break;
+    }
+    return ok;
+}
+
+status sodoku_branch()
+{
+    int choice;
+    int size;
+    puzzel_node p_node;
+    while (1)
+    {
+        system("clear");
+        cnf_node node;
+        char filename[81] = "sodoku"; //store the filename
+        cout << "enter the size of the binary sodoku\n"
+             << "enter 0 to exit" << endl;
+        cin >> size;
+        if (size == 0)
+            break;
+        else if (size % 2)
+        {
+            cout << "wrong input" << endl;
+            continue;
+        }
+        //generate related clauses
+        initialize_dict_info(node, size);
+        generate_clauses(filename, size);
+        read_sodoku_cnf(node, filename, size);
+        solver(filename, node);
+        //generate sodoku
+        initialize_puzzel_node(p_node, size);
+        read_sodoku_result(p_node, filename);
+        system("clear");
+        cout << "how hard do you want?\n"
+             << "easy: 1\tmedium: 2\tevil: 3" << endl;
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            generalize_easy_mode(node, p_node);
+            //random_generate(p_node);
+            play_sodoku(p_node);
+            break;
+        case 2:
+            generalize_medium_mode(node, p_node);
+            //random_generate(p_node);
+            play_sodoku(p_node);
+            break;
+        case 3:
+            generalize_evil_mode(node, p_node);
+            //random_generate(p_node);
+            play_sodoku(p_node);
+
+            break;
+
+        default:
+            cout << "wrong input" << endl;
+            break;
+        }
+        getchar();
+        getchar();
+        free_puzzel_node(p_node);
+        //
+    }
+}
+
+status check_win(puzzel_node p_node)
+{
+    for (int i = 0; i < p_node.size * p_node.size; i++)
+        if (p_node.puzzel_desk[i] != p_node.answer[i])
+            return wrong;
+    return ok;
+}
+
+status play_sodoku(puzzel_node &p_node)
+{
+    puzzel_node player_node;
+    copy_puzzel_node(p_node, player_node);
+    int row, column;
+    do
+    {
+        system("clear");
+        show_puzzel_desk(player_node);
+        cout << "which position do you want to fill\nrow:\tcolumn:" << endl;
+        cin >> row;
+        cin >> column;
+        if (p_node.puzzel_desk[(row - 1) * player_node.size + (column - 1)] != unassigned)
+        {
+            cout << "wrong input" << endl;
+            getchar();
+            getchar();
+            continue;
+        }
+        system("clear");
+        player_node.puzzel_desk[(row - 1) * player_node.size + (column - 1)] = selected;
+        show_puzzel_desk(player_node);
+        cout << "enter value" << endl;
+        cin >> player_node.puzzel_desk[(row - 1) * player_node.size + (column - 1)];
+    } while (check_win(player_node) == wrong);
+    system("clear");
+    show_puzzel_desk(player_node);
+    cout << "you win" << endl;
+    free_puzzel_node(player_node);
+    getchar();
+    getchar();
+}
+
 int display_choice()
 {
     int choice;
@@ -94,8 +220,10 @@ status show_puzzel_desk(puzzel_node current_node) //print the chess desk on the 
                 else
                 {
                     print_space(1);
-                    if (current_node.puzzel_desk[(i - 1) * current_node.size + j - 1] != unassigned)
+                    if ((current_node.puzzel_desk[(i - 1) * current_node.size + j - 1] == True) || (current_node.puzzel_desk[(i - 1) * current_node.size + j - 1] == False))
                         cout << current_node.puzzel_desk[(i - 1) * current_node.size + j - 1];
+                    else if (current_node.puzzel_desk[(i - 1) * current_node.size + j - 1] == selected)
+                        cout << '_';
                     else
                         cout << ' ';
                 }

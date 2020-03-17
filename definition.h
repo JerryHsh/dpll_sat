@@ -23,12 +23,13 @@ typedef int value;
 const value True = 1;
 const value False = 0;
 const value unassigned = -1;
+const value selected = -2;
 
 typedef int solution_status;
 
 const solution_status satisfied = 1;
 const solution_status unsatisfied = 0;
-const solution_status over_limit=-1;
+const solution_status over_limit = -1;
 
 // 0 means positive 1 means negatice
 const int positive = 0;
@@ -45,13 +46,11 @@ typedef struct
     int size; //normal dpll the size is 0
 } cnf_node;
 
-
-typedef struct 
+typedef struct
 {
     value *puzzel_desk;
-    value * answer;//store the answer of current node
+    value *answer; //store the answer of current node
     int size;
-}puzzel_node;
-
+} puzzel_node;
 
 #endif // !DEFINITION_H
