@@ -83,6 +83,7 @@ status sodoku_branch()
         free_puzzel_node(p_node);
         //
     }
+    return ok;
 }
 
 status check_win(puzzel_node p_node)
@@ -93,15 +94,31 @@ status check_win(puzzel_node p_node)
     return ok;
 }
 
+status correct_node(puzzel_node &p_node) //check if the current node have wrong cell
+{
+    int flag = 0;
+    for (int i = 0; i < p_node.size * p_node.size; i++)
+        if ((p_node.puzzel_desk[i] != p_node.answer[i]) && (p_node.puzzel_desk[i] != unassigned))
+        {
+            p_node.puzzel_desk[i] = unassigned;
+            flag = 1;
+        }
+    if (flag)
+        return wrong;
+    else
+        return ok;
+}
+
 status play_sodoku(puzzel_node &p_node)
 {
+    bool choice;
     puzzel_node player_node;
     copy_puzzel_node(p_node, player_node);
     int row, column;
+    system("clear");
+    show_puzzel_desk(player_node);
     do
     {
-        system("clear");
-        show_puzzel_desk(player_node);
         cout << "which position do you want to fill\nrow:\tcolumn:" << endl;
         cin >> row;
         cin >> column;
@@ -117,6 +134,17 @@ status play_sodoku(puzzel_node &p_node)
         show_puzzel_desk(player_node);
         cout << "enter value" << endl;
         cin >> player_node.puzzel_desk[(row - 1) * player_node.size + (column - 1)];
+        cout << "do you want to check your answer?0/1" << endl;
+        cin >> choice;
+        if (choice)
+        {
+            if (correct_node(player_node) == ok)
+                cout << "the current situation is right" << endl;
+            else
+                cout << "the node has been correct" << endl;
+        }
+        system("clear");
+        show_puzzel_desk(player_node);
     } while (check_win(player_node) == wrong);
     system("clear");
     show_puzzel_desk(player_node);
@@ -124,6 +152,7 @@ status play_sodoku(puzzel_node &p_node)
     free_puzzel_node(player_node);
     getchar();
     getchar();
+    return ok;
 }
 
 int display_choice()
