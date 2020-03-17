@@ -119,6 +119,8 @@ status play_sodoku(puzzel_node &p_node)
     show_puzzel_desk(player_node);
     do
     {
+        system("clear");
+        show_puzzel_desk(player_node);
         cout << "which position do you want to fill\nrow:\tcolumn:" << endl;
         cin >> row;
         cin >> column;
