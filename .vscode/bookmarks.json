@@ -1,0 +1,27 @@
+[
+	{
+		"path": "$ROOTPATH$/clause_related.cpp",
+		"bookmarks": [
+			{
+				"line": 27,
+				"column": 81,
+				"label": "using stack to store the update clauses"
+			},
+			{
+				"line": 34,
+				"column": 23,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/optimize.cpp",
+		"bookmarks": [
+			{
+				"line": 44,
+				"column": 51,
+				"label": "find a bug here"
+			}
+		]
+	}
+]

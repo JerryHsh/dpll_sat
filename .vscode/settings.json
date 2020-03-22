@@ -43,8 +43,12 @@
         "streambuf": "cpp",
         "random": "cpp",
         "typeinfo": "cpp",
+<<<<<<< HEAD
+        "functional": "cpp"
+=======
         "functional": "cpp",
         "list": "cpp",
         "iterator": "cpp"
+>>>>>>> dev
     }
 }
