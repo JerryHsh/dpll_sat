@@ -121,13 +121,6 @@ status play_sodoku(puzzel_node &p_node)
     {
         system("clear");
         show_puzzel_desk(player_node);
-        if (check_win(player_node) == ok)
-        {
-            cout << "you win" << endl;
-            getchar();
-            getchar();
-            break;
-        }
         cout << "which position do you want to fill\nrow:\tcolumn:" << endl;
         cin >> row;
         cin >> column;
@@ -145,6 +138,13 @@ status play_sodoku(puzzel_node &p_node)
         cin >> player_node.puzzel_desk[(row - 1) * player_node.size + (column - 1)];
         system("clear");
         show_puzzel_desk(player_node);
+        if (check_win(player_node) == ok)
+        {
+            cout << "you win" << endl;
+            getchar();
+            getchar();
+            break;
+        }
         cout << "do you want to check your answer?0/1" << endl;
         cout << "if you want to exit enter 2" << endl;
         cin >> choice;
